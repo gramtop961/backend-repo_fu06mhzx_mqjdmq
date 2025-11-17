@@ -38,6 +38,27 @@ class Product(BaseModel):
     category: str = Field(..., description="Product category")
     in_stock: bool = Field(True, description="Whether product is in stock")
 
+# Soccer predictor schemas
+
+class TeamRating(BaseModel):
+    """Elo-style rating for a team"""
+    team_name: str = Field(..., description="Team name")
+    rating: float = Field(1500.0, description="Elo-style rating (default 1500)")
+
+class PredictionRequest(BaseModel):
+    home_team: str
+    away_team: str
+    minute: int = Field(..., ge=0, le=130, description="Current game minute (0-120 including stoppage/extra)")
+    home_score: int = Field(..., ge=0)
+    away_score: int = Field(..., ge=0)
+    is_neutral: bool = Field(False, description="If true, no home advantage applied")
+
+class PredictionResult(BaseModel):
+    p_home: float
+    p_draw: float
+    p_away: float
+    effective_diff: float = Field(..., description="Effective rating difference used in prediction (home - away)")
+
 # Add your own schemas here:
 # --------------------------------------------------
 
